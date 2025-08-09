@@ -2,7 +2,7 @@
   "name": "finantic-landing",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ethanyang.github.io/finantic-web",
+  "homepage": "http://finantic-website.s3-website.ca-central-1.amazonaws.com",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

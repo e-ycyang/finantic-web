@@ -6,10 +6,10 @@ function App() {
   const [showEmail, setShowEmail] = useState(false);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const taglines = [
     "The AI-native investor intelligence platform.",
-    "Bloomberg terminal for the AI era.",
     "From idea to conviction in minutes.",
     "Intelligent AI agent for the intelligent investor.",
     "Insight without the institutional overhead.",
@@ -42,25 +42,41 @@ function App() {
     
     // Only process the form if there's actually data
     if (name.trim() || email.trim()) {
+      setIsSubmitting(true);
+      
+      // Get API endpoint from environment variable or use default for development
+      const apiEndpoint = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:5000/api/waitlist';
+      
       // Send data to server
-      fetch('http://localhost:5000/api/waitlist', {
+      fetch(apiEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name, email }),
       })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then(data => {
           console.log('Success:', data);
-          // Optional: reset the form
-          setName('');
-          setEmail('');
-          setShowEmail(false);
+          setIsSubmitting(false);
+          
+          // Brief delay then smoothly transition back to logo
+          setTimeout(() => {
+            setName('');
+            setEmail('');
+            setShowEmail(false);
+          }, 500);
         })
         .catch((error) => {
           console.error('Error:', error);
-          // Handle error (could show an error message to the user)
+          setIsSubmitting(false);
+          // Handle error (show error message to the user)
+          alert('Sorry, there was an error submitting your information. Please try again.');
         });
     }
     
@@ -77,7 +93,7 @@ function App() {
         >
           {!showEmail ? (
             <img 
-              src={`${process.env.PUBLIC_URL}/images/Finantic.png`} 
+              src={`${process.env.PUBLIC_URL}/images/finantic.png`}
               alt="Finantic Logo" 
               className="logo" 
             />
@@ -91,6 +107,7 @@ function App() {
                   placeholder="Your name"
                   className="name-input"
                   autoFocus
+                  disabled={isSubmitting}
                 />
                 <input
                   type="email"
@@ -98,9 +115,11 @@ function App() {
                   onChange={handleEmailChange}
                   placeholder="Your email"
                   className="email-input"
+                  disabled={isSubmitting}
                 />
               </div>
-              <button type="submit" className="submit-button">
+              <button type="submit" className={`submit-button ${isSubmitting ? 'loading' : ''}`} disabled={isSubmitting}>
+                {isSubmitting && <div className="loading-spinner"></div>}
               </button>
             </form>
           )}

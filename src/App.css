@@ -146,6 +146,82 @@
   background-color: rgba(255, 255, 255, 0.08);
 }
 
+.submit-button.loading {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+}
+
+.submit-button.loading::after {
+  display: none;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.success-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  animation: successFadeIn 0.5s ease-in-out;
+}
+
+.success-icon {
+  font-size: 32px;
+  color: #4CAF50;
+  margin-bottom: 10px;
+  animation: successBounce 0.6s ease-in-out;
+}
+
+.success-text {
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+}
+
+@keyframes successFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes successBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.name-input:disabled,
+.email-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .tagline {
   font-size: 24px;
   font-weight: 500;
